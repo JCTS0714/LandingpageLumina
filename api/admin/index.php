@@ -165,10 +165,26 @@ if ($leadsFileExists && !$leadsFileReadable) {
   $readWarning = 'El archivo de leads existe pero PHP no puede leerlo (permisos).';
 }
 
-$rows = $leadsFileReadable ? read_jsonl($leadsFile, $limit) : [];
+$readError = '';
+if ($leadsFileReadable) {
+  [$rows, $readError] = read_jsonl_result($leadsFile, $limit);
+} else {
+  $rows = [];
+}
+
+if ($readWarning === '' && $readError !== '' && $leadsFileExists) {
+  $readWarning = $readError;
+}
 
 if ($q !== '') {
-    $qLower = mb_strtolower($q);
+  $toLower = function (string $s): string {
+    return function_exists('mb_strtolower') ? mb_strtolower($s) : strtolower($s);
+  };
+  $pos = function (string $haystack, string $needle): int|false {
+    return function_exists('mb_strpos') ? mb_strpos($haystack, $needle) : strpos($haystack, $needle);
+  };
+
+  $qLower = $toLower($q);
     $rows = array_values(array_filter($rows, function ($r) use ($qLower) {
         $blob = (
             (string)($r['name'] ?? '') . ' ' .
@@ -176,7 +192,8 @@ if ($q !== '') {
             (string)($r['company'] ?? '') . ' ' .
             (string)($r['message'] ?? '')
         );
-        return mb_strpos(mb_strtolower($blob), $qLower) !== false;
+    $blobLower = function_exists('mb_strtolower') ? mb_strtolower($blob) : strtolower($blob);
+    return (function_exists('mb_strpos') ? mb_strpos($blobLower, $qLower) : strpos($blobLower, $qLower)) !== false;
     }));
 }
 

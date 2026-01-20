@@ -24,21 +24,43 @@ function safe_int(mixed $v, int $default, int $min, int $max): int
  */
 function read_jsonl(string $filePath, int $maxRows): array
 {
+    return read_jsonl_result($filePath, $maxRows)[0];
+}
+
+/**
+ * Reads JSONL and also returns a human-readable error message when it fails.
+ *
+ * @return array{0: array, 1: string} [rows, error]
+ */
+function read_jsonl_result(string $filePath, int $maxRows): array
+{
     if (!is_file($filePath)) {
-        return [];
+        return [[], 'Archivo no encontrado.'];
     }
 
     $maxRows = max(1, min(2000, $maxRows));
 
-    $lines = @file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    if (!is_array($lines)) {
-        return [];
+    $fh = @fopen($filePath, 'rb');
+    if ($fh === false) {
+        return [[], 'No se pudo abrir el archivo para lectura (permisos u open_basedir).'];
     }
 
-    // Keep last N lines (most recent at bottom)
-    if (count($lines) > $maxRows) {
-        $lines = array_slice($lines, -$maxRows);
+    $lines = [];
+    while (!feof($fh)) {
+        $line = fgets($fh);
+        if (!is_string($line)) {
+            break;
+        }
+        $line = trim($line);
+        if ($line === '') {
+            continue;
+        }
+        $lines[] = $line;
+        if (count($lines) > $maxRows) {
+            array_shift($lines);
+        }
     }
+    fclose($fh);
 
     $rows = [];
     foreach ($lines as $line) {
@@ -51,7 +73,11 @@ function read_jsonl(string $filePath, int $maxRows): array
     // Newest first
     $rows = array_reverse($rows);
 
-    return $rows;
+    if (count($rows) === 0 && filesize($filePath) > 0) {
+        return [[], 'No se pudo parsear el JSONL (líneas inválidas o codificación).'];
+    }
+
+    return [$rows, ''];
 }
 
 function rows_to_csv(array $rows): string
