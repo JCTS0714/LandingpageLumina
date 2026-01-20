@@ -14,6 +14,9 @@ if (empty($config)) {
     'error' => 'Backend no configurado: falta api/config/config.php o api/config/config.example.php',
   ]);
 }
+
+// Always define this so the template can build links safely.
+$providedKey = (string)($_GET['key'] ?? '');
 header('X-Robots-Tag: noindex, nofollow', true);
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0', true);
 header('Pragma: no-cache', true);
@@ -159,6 +162,7 @@ $q = trim((string)($_GET['q'] ?? ''));
 $leadsFileExists = is_file($leadsFile);
 $leadsFileReadable = $leadsFileExists && is_readable($leadsFile);
 $leadsFileReal = $leadsFileExists ? (realpath($leadsFile) ?: $leadsFile) : $leadsFile;
+$leadsFileSize = ($leadsFileExists && is_readable($leadsFile)) ? (@filesize($leadsFile) ?: 0) : 0;
 
 $readWarning = '';
 if ($leadsFileExists && !$leadsFileReadable) {
@@ -174,6 +178,28 @@ if ($leadsFileReadable) {
 
 if ($readWarning === '' && $readError !== '' && $leadsFileExists) {
   $readWarning = $readError;
+}
+
+// Authenticated debug endpoint
+if (isset($_GET['debug'])) {
+  send_json(200, [
+    'ok' => true,
+    'php' => PHP_VERSION,
+    'file' => [
+      'path' => $leadsFileReal,
+      'exists' => $leadsFileExists,
+      'readable' => $leadsFileReadable,
+      'size' => $leadsFileSize,
+      'perms_file' => fmt_perms($leadsFileReal),
+      'perms_dir' => fmt_perms(dirname($leadsFileReal)),
+    ],
+    'rows' => [
+      'count' => count($rows),
+      'readError' => $readError,
+      'warning' => $readWarning,
+    ],
+    'open_basedir' => ini_get('open_basedir') ?: '',
+  ]);
 }
 
 if ($q !== '') {
@@ -255,6 +281,7 @@ function fmt_perms(string $path): string
       <div>
         <h1>Solicitudes de demo — Lumina CRM</h1>
         <div class="sub">Archivo: <span class="mono"><?php echo h($leadsFileReal); ?></span></div>
+        <div class="sub">Estado: <span class="mono"><?php echo $leadsFileExists ? 'exists' : 'missing'; ?></span> · <span class="mono"><?php echo $leadsFileReadable ? 'readable' : 'not-readable'; ?></span> · <span class="mono"><?php echo (string)$leadsFileSize; ?> bytes</span> · <span class="mono"><?php echo (string)count($rows); ?> filas</span></div>
         <?php if ($readWarning !== ''): ?>
           <div class="sub" style="margin-top:8px; color:#b42318; font-weight:800;">
             <?php echo h($readWarning); ?>
