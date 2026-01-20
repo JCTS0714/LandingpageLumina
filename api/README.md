@@ -1,60 +1,48 @@
-# Lumina Landing – Mini backend (PHP)
+# Lumina CRM — Mini backend (PHP)
 
-This folder contains a minimal PHP backend used only to receive the landing form submission.
+Este backend es minimalista: recibe el formulario del landing, valida, aplica anti-spam básico y persiste las solicitudes en un archivo JSONL.
 
 ## Endpoints
-- `POST /Landing/api/contact.php` → accepts JSON or form-encoded data and returns JSON.
+- `POST /api/contact.php` (o `/Landing/api/contact.php` si estás en subcarpeta)
+	- Acepta JSON (`Content-Type: application/json`) o form (`multipart/form-data` / `application/x-www-form-urlencoded`).
+	- Responde JSON `{ ok: true, id: "..." }`.
 
-## Local paths
-- Config: `api/config/config.php` (copy from `config.example.php`)
-- Storage: `api/storage/` (JSONL leads + rate limit file)
+## Persistencia
+- Leads: `api/storage/leads.jsonl` (1 JSON por línea)
+- Rate limit: `api/storage/ratelimit.json`
 
-## Deploy (Hostinger)
-This project does **not** commit `api/config/config.php` to Git (it may contain secrets).
+## Configuración
+Por seguridad, `api/config/config.php` NO se commitea al repo.
 
-You have two options:
+### Opción recomendada: crear config.php en el servidor
+1. Copia `api/config/config.example.php` → `api/config/config.php`.
+2. Ajusta:
+	 - `admin.user` y `admin.pass` (recomendado) para login por sesión.
+	 - `admin.key` (fallback) para `?key=...`.
 
-### Option A (recommended): create `config.php` on the server
-1. In Hostinger File Manager, go to `public_html/Landing/api/config/` (or your site folder).
-2. Copy `config.example.php` → `config.php`.
-3. Edit `config.php` and set a strong admin key in `admin.key`.
+### Overrides por variables de entorno (si tu hosting lo soporta)
+El loader soporta `LUMINA_ADMIN_KEY`. En el panel admin también se leen `LUMINA_ADMIN_USER` y `LUMINA_ADMIN_PASS`.
 
-### Option B: set admin key via environment variable (no `config.php` needed)
-Add this line to your web root `.htaccess` (or a per-folder `.htaccess`):
+Ejemplo en `.htaccess` (si `SetEnv` funciona en tu host):
+- `SetEnv LUMINA_ADMIN_USER "admin"`
+- `SetEnv LUMINA_ADMIN_PASS "CONTRASEÑA_LARGA"`
+- `SetEnv LUMINA_ADMIN_KEY "KEY_LARGA_URL_SAFE"`
 
-`SetEnv LUMINA_ADMIN_KEY "PUT_A_LONG_RANDOM_KEY_HERE"`
+## Admin
+- URL:
+	- Root del dominio: `/api/admin/`
+	- Subcarpeta (ej. `/Landing`): `/Landing/api/admin/`
 
-Then open:
-- If you uploaded the project into the domain root: `/api/admin/?key=PUT_A_LONG_RANDOM_KEY_HERE`
-- If you uploaded into a subfolder named `Landing`: `/Landing/api/admin/?key=PUT_A_LONG_RANDOM_KEY_HERE`
+### Autenticación (orden)
+1. Si hay `admin.user`/`admin.pass` (por env o config), se usa login por sesión (más compatible en hosting compartido).
+2. Si NO hay credenciales, se usa fallback `?key=...`.
+	 - Importante: evita `#` en la key (es un fragmento del navegador y no llega al servidor).
 
-### Recommended (more secure): HTTP Basic Auth (no secret in URL)
-On shared hosting, query-string keys can leak in browser history and server logs.
+### Export y diagnóstico
+- CSV: `?format=csv`
+- Debug JSON (requiere estar autenticado): `?debug=1`
+	- Devuelve estado del archivo (exists/readable/size/perms) + conteo de filas.
 
-You can set credentials either via `SetEnv` (if your host supports it) **or** directly in `api/config/config.php`.
-
-#### Option 1: credentials in `api/config/config.php` (most compatible)
-
-```php
-return [
-	'admin' => [
-		'user' => 'admin',
-		'pass' => 'PUT_A_LONG_RANDOM_PASSWORD_HERE',
-	],
-];
-```
-
-Then open the admin URL (without `?key=`):
-- Domain root: `/api/admin/`
-- Subfolder `Landing`: `/Landing/api/admin/`
-
-#### Option 2: credentials via environment variables
-Add to your web root `.htaccess`:
-
-`SetEnv LUMINA_ADMIN_USER "admin"`
-
-`SetEnv LUMINA_ADMIN_PASS "PUT_A_LONG_RANDOM_PASSWORD_HERE"`
-
-## Notes
-- This backend is intentionally small: validation + honeypot + rate limit + storage.
-- Email sending is optional and disabled by default (configure in `config.php`).
+## Notas
+- Anti-spam: honeypot + rate limit básico por IP.
+- Envío de email está deshabilitado por defecto (`email.enabled=false`). Si luego quieres SMTP (PHPMailer), se puede agregar.
