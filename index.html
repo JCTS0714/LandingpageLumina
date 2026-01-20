@@ -850,7 +850,8 @@
             return;
           }
 
-          setStatus('Listo. Recibimos tu solicitud y te contactaremos pronto.', true);
+          const idText = (data && data.id) ? ` (ID: ${data.id})` : '';
+          setStatus('Listo. Recibimos tu solicitud y te contactaremos pronto.' + idText, true);
           leadForm.reset();
         } catch (err) {
           setStatus('Error de conexión. Intenta nuevamente en unos segundos.', false);

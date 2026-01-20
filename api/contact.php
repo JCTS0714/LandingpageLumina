@@ -43,12 +43,18 @@ if (!$ok) {
 
 $data = parse_request_body();
 
+$debug = !empty($config['debug']);
+
+$leadId = '';
+try {
+    $leadId = bin2hex(random_bytes(8));
+} catch (Throwable $e) {
+    // Fallback if random_bytes is not available
+    $leadId = substr(sha1(uniqid('', true)), 0, 16);
+}
+
 // Honeypot (bots usually fill this)
 $website = isset($data['website']) ? clean_text((string)$data['website'], 200) : '';
-if ($website !== '') {
-    // Pretend success (do not help spammers)
-    send_json(200, ['ok' => true]);
-}
 
 $name = clean_text($data['name'] ?? '', 80);
 $email = clean_text($data['email'] ?? '', 254);
@@ -71,6 +77,7 @@ if (!empty($errors)) {
 }
 
 $lead = [
+    'id' => $leadId,
     'ts' => gmdate('c'),
     'ip' => $ip,
     'ua' => clean_text($_SERVER['HTTP_USER_AGENT'] ?? '', 220),
@@ -80,9 +87,33 @@ $lead = [
     'message' => $message,
 ];
 
+// If the honeypot is filled, don't lose the lead: mark it so you can review it.
+// Some password managers/autofill can accidentally fill hidden fields.
+if ($website !== '') {
+    $lead['spam'] = true;
+    $lead['website'] = $website;
+}
+
 $leadsFile = (string)($config['storage']['leads_file'] ?? (__DIR__ . '/storage/leads.jsonl'));
+// Basic permissions sanity check (helps on shared hosting)
+$leadsDir = dirname($leadsFile);
+if (!is_dir($leadsDir)) {
+    @mkdir($leadsDir, 0775, true);
+}
+if (!is_dir($leadsDir) || !is_writable($leadsDir)) {
+    $msg = 'No se pudo guardar el registro (carpeta sin permisos de escritura).';
+    if ($debug) {
+        $msg .= ' Dir: ' . $leadsDir;
+    }
+    send_json(500, ['ok' => false, 'error' => $msg]);
+}
+
 if (!append_jsonl($leadsFile, $lead)) {
-    send_json(500, ['ok' => false, 'error' => 'No se pudo guardar el registro.']);
+    $msg = 'No se pudo guardar el registro.';
+    if ($debug) {
+        $msg .= ' Archivo: ' . $leadsFile;
+    }
+    send_json(500, ['ok' => false, 'error' => $msg]);
 }
 
 // Optional email notification
@@ -112,4 +143,4 @@ if (is_array($emailCfg) && !empty($emailCfg['enabled'])) {
     }
 }
 
-send_json(200, ['ok' => true]);
+send_json(200, ['ok' => true, 'id' => $leadId]);
