@@ -153,7 +153,16 @@ $leadsFile = (string)($config['storage']['leads_file'] ?? (__DIR__ . '/../storag
 $limit = safe_int($_GET['limit'] ?? 200, 200, 10, 2000);
 $q = trim((string)($_GET['q'] ?? ''));
 
-$rows = read_jsonl($leadsFile, $limit);
+$leadsFileExists = is_file($leadsFile);
+$leadsFileReadable = $leadsFileExists && is_readable($leadsFile);
+$leadsFileReal = $leadsFileExists ? (realpath($leadsFile) ?: $leadsFile) : $leadsFile;
+
+$readWarning = '';
+if ($leadsFileExists && !$leadsFileReadable) {
+  $readWarning = 'El archivo de leads existe pero PHP no puede leerlo (permisos).';
+}
+
+$rows = $leadsFileReadable ? read_jsonl($leadsFile, $limit) : [];
 
 if ($q !== '') {
     $qLower = mb_strtolower($q);
@@ -178,6 +187,18 @@ if (($_GET['format'] ?? '') === 'csv') {
 
 function h(string $s): string {
     return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function fmt_perms(string $path): string
+{
+  if (!file_exists($path)) {
+    return '-';
+  }
+  $perms = @fileperms($path);
+  if ($perms === false) {
+    return '-';
+  }
+  return substr(sprintf('%o', $perms), -4);
 }
 
 ?><!doctype html>
@@ -213,7 +234,13 @@ function h(string $s): string {
     <div class="top">
       <div>
         <h1>Solicitudes de demo — Lumina CRM</h1>
-        <div class="sub">Archivo: <span class="mono"><?php echo h($leadsFile); ?></span></div>
+        <div class="sub">Archivo: <span class="mono"><?php echo h($leadsFileReal); ?></span></div>
+        <?php if ($readWarning !== ''): ?>
+          <div class="sub" style="margin-top:8px; color:#b42318; font-weight:800;">
+            <?php echo h($readWarning); ?>
+            <span style="font-weight:700; color:#4B5A78;">Perms: <?php echo h(fmt_perms($leadsFileReal)); ?> (file), <?php echo h(fmt_perms(dirname($leadsFileReal))); ?> (dir)</span>
+          </div>
+        <?php endif; ?>
       </div>
       <div class="card" style="padding:12px 12px;">
         <form method="get">
