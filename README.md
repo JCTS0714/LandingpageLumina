@@ -6,6 +6,12 @@ Landing page estática pensada para servir desde XAMPP.
 - URL local típica: `http://localhost/Landing/`
 - Archivo principal: `index.html`
 
+## Deploy (Hostinger)
+- Sube el contenido a `public_html/` (o a una subcarpeta).
+- Importante: `api/config/config.php` **no se sube al repo** (está en `.gitignore`).
+	- Opción recomendada: crea `api/config/config.php` en el servidor copiando `api/config/config.example.php` y cambia `admin.key`.
+	- Alternativa: define `SetEnv LUMINA_ADMIN_KEY "TU_CLAVE"` en tu `.htaccess` (ver detalles en `api/README.md`).
+
 ## Personalizar
 - Edita el copy y links en `index.html`.
 - Reemplaza placeholders de screenshots en la sección “Vista del producto”.

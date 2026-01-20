@@ -3,18 +3,17 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../src/http.php';
+require_once __DIR__ . '/../src/config.php';
 require_once __DIR__ . '/../src/leads.php';
 
-$configPath = __DIR__ . '/../config/config.php';
-if (!is_file($configPath)) {
-    send_json(500, [
-        'ok' => false,
-        'error' => 'Backend no configurado: falta api/config/config.php',
-    ]);
-}
+$config = load_config();
 
-/** @var array $config */
-$config = require $configPath;
+if (empty($config)) {
+  send_json(500, [
+    'ok' => false,
+    'error' => 'Backend no configurado: falta api/config/config.php o api/config/config.example.php',
+  ]);
+}
 
 // Very small protection: require a key in query string.
 // Example: /Landing/api/admin/?key=TU_CLAVE

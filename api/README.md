@@ -9,6 +9,24 @@ This folder contains a minimal PHP backend used only to receive the landing form
 - Config: `api/config/config.php` (copy from `config.example.php`)
 - Storage: `api/storage/` (JSONL leads + rate limit file)
 
+## Deploy (Hostinger)
+This project does **not** commit `api/config/config.php` to Git (it may contain secrets).
+
+You have two options:
+
+### Option A (recommended): create `config.php` on the server
+1. In Hostinger File Manager, go to `public_html/Landing/api/config/` (or your site folder).
+2. Copy `config.example.php` → `config.php`.
+3. Edit `config.php` and set a strong admin key in `admin.key`.
+
+### Option B: set admin key via environment variable (no `config.php` needed)
+Add this line to your web root `.htaccess` (or a per-folder `.htaccess`):
+
+`SetEnv LUMINA_ADMIN_KEY "PUT_A_LONG_RANDOM_KEY_HERE"`
+
+Then open:
+- `/api/admin/?key=PUT_A_LONG_RANDOM_KEY_HERE`
+
 ## Notes
 - This backend is intentionally small: validation + honeypot + rate limit + storage.
 - Email sending is optional and disabled by default (configure in `config.php`).

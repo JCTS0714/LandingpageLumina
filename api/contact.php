@@ -3,21 +3,20 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/src/http.php';
+require_once __DIR__ . '/src/config.php';
 require_once __DIR__ . '/src/validation.php';
 require_once __DIR__ . '/src/rate_limit.php';
 require_once __DIR__ . '/src/storage.php';
 
-$configPath = __DIR__ . '/config/config.php';
-if (!is_file($configPath)) {
+$config = load_config();
+
+if (empty($config)) {
     allow_cors('*');
     send_json(500, [
         'ok' => false,
-        'error' => 'Backend no configurado: copia api/config/config.example.php a api/config/config.php',
+        'error' => 'Backend no configurado: falta api/config/config.php o api/config/config.example.php',
     ]);
 }
-
-/** @var array $config */
-$config = require $configPath;
 
 $allowOrigin = $config['cors']['allow_origin'] ?? '*';
 allow_cors(is_string($allowOrigin) ? $allowOrigin : '*');
