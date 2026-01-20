@@ -31,17 +31,9 @@ Then open:
 ### Recommended (more secure): HTTP Basic Auth (no secret in URL)
 On shared hosting, query-string keys can leak in browser history and server logs.
 
-Add to your web root `.htaccess`:
+You can set credentials either via `SetEnv` (if your host supports it) **or** directly in `api/config/config.php`.
 
-`SetEnv LUMINA_ADMIN_USER "admin"`
-
-`SetEnv LUMINA_ADMIN_PASS "PUT_A_LONG_RANDOM_PASSWORD_HERE"`
-
-Then open the admin URL (without `?key=`):
-- Domain root: `/api/admin/`
-- Subfolder `Landing`: `/Landing/api/admin/`
-
-If `SetEnv` does not work on your hosting, you can also set credentials in `api/config/config.php` (server-only):
+#### Option 1: credentials in `api/config/config.php` (most compatible)
 
 ```php
 return [
@@ -51,6 +43,17 @@ return [
 	],
 ];
 ```
+
+Then open the admin URL (without `?key=`):
+- Domain root: `/api/admin/`
+- Subfolder `Landing`: `/Landing/api/admin/`
+
+#### Option 2: credentials via environment variables
+Add to your web root `.htaccess`:
+
+`SetEnv LUMINA_ADMIN_USER "admin"`
+
+`SetEnv LUMINA_ADMIN_PASS "PUT_A_LONG_RANDOM_PASSWORD_HERE"`
 
 ## Notes
 - This backend is intentionally small: validation + honeypot + rate limit + storage.

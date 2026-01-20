@@ -30,12 +30,73 @@ if (($basicPass === null || $basicPass === '') && isset($config['admin']['pass']
 }
 
 if ($basicUser !== null && $basicUser !== '' && $basicPass !== null && $basicPass !== '') {
-  [$u, $p] = get_basic_auth_credentials();
-  if ($u === null || $p === null || !hash_equals($basicUser, $u) || !hash_equals($basicPass, $p)) {
-    header('WWW-Authenticate: Basic realm="Lumina Admin"');
+  // Session-based login (most compatible on shared hosting)
+  session_name('lumina_admin');
+  if (PHP_VERSION_ID >= 70300) {
+    session_set_cookie_params([
+      'httponly' => true,
+      'samesite' => 'Lax',
+      'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+    ]);
+  }
+  if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+  }
+
+  if (isset($_GET['logout'])) {
+    $_SESSION = [];
+    if (session_id() !== '') {
+      session_destroy();
+    }
+    header('Location: ./');
+    exit;
+  }
+
+  $authOk = !empty($_SESSION['lumina_admin_authed']);
+  $loginError = '';
+
+  if (!$authOk && (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST')) {
+    $postedUser = isset($_POST['username']) ? (string)$_POST['username'] : '';
+    $postedPass = isset($_POST['password']) ? (string)$_POST['password'] : '';
+
+    if ($postedUser !== '' && $postedPass !== '' && hash_equals($basicUser, $postedUser) && hash_equals($basicPass, $postedPass)) {
+      session_regenerate_id(true);
+      $_SESSION['lumina_admin_authed'] = true;
+      $authOk = true;
+
+      // Redirect to GET to avoid form resubmission
+      header('Location: ./');
+      exit;
+    }
+
+    $loginError = 'Credenciales inválidas.';
+  }
+
+  if (!$authOk) {
     http_response_code(401);
-    header('Content-Type: text/plain; charset=utf-8');
-    echo "Unauthorized\n";
+    header('Content-Type: text/html; charset=utf-8');
+    echo '<!doctype html><html lang="es-PE"><head><meta charset="utf-8" />';
+    echo '<meta name="viewport" content="width=device-width, initial-scale=1" />';
+    echo '<title>Lumina CRM — Admin</title>';
+    echo '<style>body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial;background:#f7fbff;color:#0B1020}';
+    echo '.wrap{min-height:100vh;display:grid;place-items:center;padding:24px}';
+    echo '.card{width:100%;max-width:420px;background:#fff;border:1px solid rgba(11,61,145,.14);border-radius:16px;box-shadow:0 10px 30px rgba(11,61,145,.08);padding:18px}';
+    echo 'h1{margin:0 0 6px;font-size:18px;color:#0B3D91}';
+    echo 'p{margin:0 0 14px;color:#4B5A78;font-size:13px}';
+    echo 'label{display:block;margin:10px 0 6px;font-weight:700;font-size:13px;color:#1B2B4B}';
+    echo 'input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(11,61,145,.14);font-size:14px}';
+    echo '.btn{margin-top:14px;width:100%;padding:10px 12px;border-radius:12px;border:0;background:linear-gradient(135deg,#0B3D91,#1656c7);color:#fff;font-weight:800;font-size:14px;cursor:pointer}';
+    echo '.err{margin-top:10px;color:#b42318;font-weight:700;font-size:13px}</style>';
+    echo '</head><body><div class="wrap"><div class="card">';
+    echo '<h1>Acceso al panel</h1><p>Ingresa tus credenciales de administrador.</p>';
+    echo '<form method="post" autocomplete="off">';
+    echo '<label for="u">Usuario</label><input id="u" name="username" required />';
+    echo '<label for="p">Contraseña</label><input id="p" name="password" type="password" required />';
+    echo '<button class="btn" type="submit">Ingresar</button>';
+    if ($loginError !== '') {
+      echo '<div class="err">' . htmlspecialchars($loginError, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</div>';
+    }
+    echo '</form></div></div></body></html>';
     exit;
   }
 } else {
