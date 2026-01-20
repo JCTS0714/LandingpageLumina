@@ -14,19 +14,70 @@ if (empty($config)) {
     'error' => 'Backend no configurado: falta api/config/config.php o api/config/config.example.php',
   ]);
 }
-
-// Very small protection: require a key in query string.
-// Example: /Landing/api/admin/?key=TU_CLAVE
-$expectedKey = (string)($config['admin']['key'] ?? '');
-$providedKey = (string)($_GET['key'] ?? '');
-
 header('X-Robots-Tag: noindex, nofollow', true);
 
-if ($expectedKey === '' || !hash_equals($expectedKey, $providedKey)) {
+// Recommended protection on hosting: HTTP Basic Auth via env vars
+// (avoids secrets in URLs).
+$basicUser = env_string('LUMINA_ADMIN_USER');
+$basicPass = env_string('LUMINA_ADMIN_PASS');
+
+if ($basicUser !== null && $basicUser !== '' && $basicPass !== null && $basicPass !== '') {
+  [$u, $p] = get_basic_auth_credentials();
+  if ($u === null || $p === null || !hash_equals($basicUser, $u) || !hash_equals($basicPass, $p)) {
+    header('WWW-Authenticate: Basic realm="Lumina Admin"');
+    http_response_code(401);
+    header('Content-Type: text/plain; charset=utf-8');
+    echo "Unauthorized\n";
+    exit;
+  }
+} else {
+  // Fallback protection: require a key in query string.
+  // Example: /api/admin/?key=TU_CLAVE
+  $expectedKey = (string)($config['admin']['key'] ?? '');
+  $providedKey = (string)($_GET['key'] ?? '');
+
+  if ($expectedKey === '' || !hash_equals($expectedKey, $providedKey)) {
     http_response_code(403);
     header('Content-Type: text/plain; charset=utf-8');
     echo "Forbidden\n";
     exit;
+  }
+}
+
+function get_basic_auth_credentials(): array
+{
+  $user = $_SERVER['PHP_AUTH_USER'] ?? null;
+  $pass = $_SERVER['PHP_AUTH_PW'] ?? null;
+
+  if (is_string($user) && is_string($pass)) {
+    return [$user, $pass];
+  }
+
+  $auth = $_SERVER['HTTP_AUTHORIZATION'] ?? ($_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '');
+
+  if (!is_string($auth) || $auth === '') {
+    if (function_exists('getallheaders')) {
+      $headers = getallheaders();
+      if (is_array($headers)) {
+        $h = $headers['Authorization'] ?? ($headers['authorization'] ?? '');
+        if (is_string($h)) {
+          $auth = $h;
+        }
+      }
+    }
+  }
+
+  if (!is_string($auth) || stripos($auth, 'Basic ') !== 0) {
+    return [null, null];
+  }
+
+  $decoded = base64_decode(substr($auth, 6), true);
+  if (!is_string($decoded) || $decoded === '' || strpos($decoded, ':') === false) {
+    return [null, null];
+  }
+
+  [$u, $p] = explode(':', $decoded, 2);
+  return [$u, $p];
 }
 
 $leadsFile = (string)($config['storage']['leads_file'] ?? (__DIR__ . '/../storage/leads.jsonl'));

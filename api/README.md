@@ -28,6 +28,19 @@ Then open:
 - If you uploaded the project into the domain root: `/api/admin/?key=PUT_A_LONG_RANDOM_KEY_HERE`
 - If you uploaded into a subfolder named `Landing`: `/Landing/api/admin/?key=PUT_A_LONG_RANDOM_KEY_HERE`
 
+### Recommended (more secure): HTTP Basic Auth (no secret in URL)
+On shared hosting, query-string keys can leak in browser history and server logs.
+
+Add to your web root `.htaccess`:
+
+`SetEnv LUMINA_ADMIN_USER "admin"`
+
+`SetEnv LUMINA_ADMIN_PASS "PUT_A_LONG_RANDOM_PASSWORD_HERE"`
+
+Then open the admin URL (without `?key=`):
+- Domain root: `/api/admin/`
+- Subfolder `Landing`: `/Landing/api/admin/`
+
 ## Notes
 - This backend is intentionally small: validation + honeypot + rate limit + storage.
 - Email sending is optional and disabled by default (configure in `config.php`).

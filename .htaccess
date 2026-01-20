@@ -14,7 +14,13 @@ Options -Indexes
 # Block access to hidden files/folders (except .well-known)
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteRule "(^|/)\.((?!well-known/).)*" - [F]
+
+  # Block direct access to sensitive backend folders
+  RewriteRule ^api/(config|storage)(/|$) - [F,L]
+
+  # Block dotfiles (keep minimal/compatible)
+  RewriteCond %{REQUEST_URI} !/\.well-known/ [NC]
+  RewriteRule (^|/)\. - [F,L]
 </IfModule>
 
 # Block common sensitive file types
@@ -27,19 +33,6 @@ Options -Indexes
     Deny from all
   </IfModule>
 </FilesMatch>
-
-# Extra protection in case per-folder .htaccess is ignored
-<IfModule mod_authz_core.c>
-  <LocationMatch "^/api/(config|storage)(/|$)">
-    Require all denied
-  </LocationMatch>
-</IfModule>
-<IfModule !mod_authz_core.c>
-  <LocationMatch "^/api/(config|storage)(/|$)">
-    Order deny,allow
-    Deny from all
-  </LocationMatch>
-</IfModule>
 
 # -----------------------------------------------------------------------------
 # Compression (safe defaults)
