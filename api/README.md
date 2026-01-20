@@ -25,7 +25,8 @@ Add this line to your web root `.htaccess` (or a per-folder `.htaccess`):
 `SetEnv LUMINA_ADMIN_KEY "PUT_A_LONG_RANDOM_KEY_HERE"`
 
 Then open:
-- `/api/admin/?key=PUT_A_LONG_RANDOM_KEY_HERE`
+- If you uploaded the project into the domain root: `/api/admin/?key=PUT_A_LONG_RANDOM_KEY_HERE`
+- If you uploaded into a subfolder named `Landing`: `/Landing/api/admin/?key=PUT_A_LONG_RANDOM_KEY_HERE`
 
 ## Notes
 - This backend is intentionally small: validation + honeypot + rate limit + storage.

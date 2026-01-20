@@ -814,10 +814,10 @@
     const leadSubmit = document.getElementById('leadSubmit');
 
     function getApiEndpoint() {
-      // Relative path works when served at http://localhost/Landing/
-      // Fallback helps when opening the file directly (file://)
+      // Works both at domain root and in subfolders.
+      // Example: https://site.com/api/contact.php or https://site.com/Landing/api/contact.php
       if (window.location.protocol === 'file:') return 'http://localhost/Landing/api/contact.php';
-      return 'api/contact.php';
+      return new URL('api/contact.php', window.location.href).toString();
     }
 
     function setStatus(text, ok) {
@@ -853,7 +853,7 @@
           setStatus('Listo. Recibimos tu solicitud y te contactaremos pronto.', true);
           leadForm.reset();
         } catch (err) {
-          setStatus('Error de conexión. Abre el landing desde http://localhost/Landing/.', false);
+          setStatus('Error de conexión. Intenta nuevamente en unos segundos.', false);
         } finally {
           if (leadSubmit) leadSubmit.disabled = false;
         }
