@@ -15,6 +15,9 @@ if (empty($config)) {
   ]);
 }
 header('X-Robots-Tag: noindex, nofollow', true);
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0', true);
+header('Pragma: no-cache', true);
+header('Expires: 0', true);
 
 // Recommended protection on hosting: HTTP Basic Auth via env vars
 // (avoids secrets in URLs).
