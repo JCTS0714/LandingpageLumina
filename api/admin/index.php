@@ -21,6 +21,14 @@ header('X-Robots-Tag: noindex, nofollow', true);
 $basicUser = env_string('LUMINA_ADMIN_USER');
 $basicPass = env_string('LUMINA_ADMIN_PASS');
 
+// Fallback if host does not pass SetEnv -> PHP: read from config.php
+if (($basicUser === null || $basicUser === '') && isset($config['admin']['user']) && is_string($config['admin']['user'])) {
+  $basicUser = $config['admin']['user'];
+}
+if (($basicPass === null || $basicPass === '') && isset($config['admin']['pass']) && is_string($config['admin']['pass'])) {
+  $basicPass = $config['admin']['pass'];
+}
+
 if ($basicUser !== null && $basicUser !== '' && $basicPass !== null && $basicPass !== '') {
   [$u, $p] = get_basic_auth_credentials();
   if ($u === null || $p === null || !hash_equals($basicUser, $u) || !hash_equals($basicPass, $p)) {

@@ -41,6 +41,17 @@ Then open the admin URL (without `?key=`):
 - Domain root: `/api/admin/`
 - Subfolder `Landing`: `/Landing/api/admin/`
 
+If `SetEnv` does not work on your hosting, you can also set credentials in `api/config/config.php` (server-only):
+
+```php
+return [
+	'admin' => [
+		'user' => 'admin',
+		'pass' => 'PUT_A_LONG_RANDOM_PASSWORD_HERE',
+	],
+];
+```
+
 ## Notes
 - This backend is intentionally small: validation + honeypot + rate limit + storage.
 - Email sending is optional and disabled by default (configure in `config.php`).
