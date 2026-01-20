@@ -1,0 +1,5 @@
+# Lumina Landing — mini PHP backend
+# NOTE: .htaccess does NOT support <Directory>/<DirectoryMatch> blocks.
+# Use per-folder .htaccess files under config/ and storage/ to deny access.
+
+Options -Indexes

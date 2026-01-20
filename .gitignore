@@ -1,0 +1,22 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.tmp
+*.log
+.vscode/
+
+# PHP / cache
+*.cache
+
+# Secrets / local config
+api/config/config.php
+
+# Runtime data (leads + rate limit state)
+api/storage/*
+!api/storage/.htaccess
+!api/storage/.gitkeep
+
+# XAMPP / Apache local artifacts (optional)
+*.pid

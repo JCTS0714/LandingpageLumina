@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lumina CRM | Claridad y control en la gestión de tus clientes</title>
+  <meta name="description" content="Lumina CRM es un CRM omnicanal con automatización e inteligencia (IA/ML) para PYMES en Perú y LATAM. Claridad, control y eficiencia para tu equipo comercial." />
+  <meta name="keywords" content="CRM para pymes, CRM Perú, CRM omnicanal, automatización de ventas, CRM WhatsApp, CRM SaaS" />
+  <meta name="theme-color" content="#0B3D91" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Lumina CRM: claridad y control en la gestión de tus clientes" />
+  <meta property="og:description" content="Automatización, IA/ML y conectividad omnicanal para vender con proceso y escalar con confianza." />
+  <meta property="og:image" content="assets/og-image.svg" />
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+  <style>
+    /*
+      Lumina CRM — Corporate palette
+      Navy:      #0B3D91
+      Turquoise: #1ABC9C
+      White:     #FFFFFF
+    */
+    :root{
+      --navy:#0B3D91;
+      --teal:#1ABC9C;
+      --white:#FFFFFF;
+
+      --ink:#0B1020;
+      --muted:#4B5A78;
+      --line:rgba(11,61,145,.14);
+      --surface:#FFFFFF;
+      --surface-2:#F6FAFF;
+      --shadow: 0 18px 50px rgba(11,61,145,.12);
+      --shadow-soft: 0 10px 30px rgba(11,61,145,.10);
+      --radius: 18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--ink);
+      background:
+        radial-gradient(900px 480px at 12% 6%, rgba(26,188,156,.14), transparent 55%),
+        radial-gradient(820px 520px at 92% 10%, rgba(11,61,145,.16), transparent 55%),
+        linear-gradient(180deg, #ffffff 0%, #f7fbff 38%, #ffffff 100%);
+      line-height:1.55;
+    }
+
+    a{color:inherit; text-decoration:none}
+    a:hover{opacity:.92}
+    img{max-width:100%; display:block}
+
+    .container{max-width:1120px; margin:0 auto; padding:0 20px}
+
+    /* Accessibility */
+    :focus-visible{outline:3px solid rgba(26,188,156,.55); outline-offset:3px; border-radius:12px}
+    .skip{position:absolute; left:-999px; top:8px; background:#fff; padding:10px 14px; border-radius:12px; box-shadow:var(--shadow-soft)}
+    .skip:focus{left:12px; z-index:9999}
+
+    /* Header */
+    .header{
+      position:sticky; top:0; z-index:50;
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      height:76px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      min-width: 220px;
+    }
+    .brand-mark{
+      width:44px; height:44px;
+      border-radius:14px;
+      box-shadow: 0 8px 18px rgba(11,61,145,.14);
+    }
+    .brand-name{font-weight:800; letter-spacing:-.02em; color:#1B2B4B; font-size:18px}
+    .brand-sub{font-size:12px; color:var(--muted)}
+
+    .menu{display:flex; align-items:center; gap:18px}
+    .menu a{font-size:14px; color:#233457; padding:10px 10px; border-radius:12px}
+    .menu a:hover{background: rgba(11,61,145,.06)}
+
+    .actions{display:flex; gap:10px; align-items:center}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      padding:12px 16px;
+      border-radius: 14px;
+      font-weight:700;
+      font-size:14px;
+      border:1px solid transparent;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+      white-space:nowrap;
+    }
+    .btn:active{transform: translateY(1px)}
+
+    .btn-primary{
+      background: linear-gradient(135deg, var(--navy), #1656c7);
+      color: var(--white);
+      box-shadow: 0 16px 34px rgba(11,61,145,.20);
+    }
+    .btn-primary:hover{box-shadow: 0 22px 46px rgba(11,61,145,.24)}
+
+    .btn-secondary{
+      background: rgba(255,255,255,.88);
+      border-color: rgba(11,61,145,.18);
+      color:#1B2B4B;
+    }
+    .btn-secondary:hover{background:#fff; box-shadow: var(--shadow-soft)}
+
+    .btn-teal{
+      background: linear-gradient(135deg, var(--teal), #2bd7b4);
+      color:#06251f;
+      border-color: rgba(6,37,31,.08);
+      box-shadow: 0 16px 34px rgba(26,188,156,.18);
+    }
+
+    .mobile-toggle{display:none}
+
+    /* Hero */
+    .hero{padding:64px 0 18px}
+    .hero-grid{display:grid; grid-template-columns: 1.12fr .88fr; gap:34px; align-items:center}
+
+    .kicker{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(11,61,145,.18);
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 10px 30px rgba(11,61,145,.08);
+      font-weight:700;
+      font-size:12px;
+      color:#223356;
+    }
+    .dot{width:10px; height:10px; border-radius:999px; background: var(--teal); box-shadow: 0 0 0 6px rgba(26,188,156,.12)}
+
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(34px, 4.2vw, 54px);
+      line-height: 1.07;
+      letter-spacing: -0.03em;
+      color:#122245;
+    }
+
+    /* Ensure headings always have contrast on the light background */
+    h2, h3{ color: var(--navy); }
+    .lead{
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 58ch;
+    }
+    .cta-row{display:flex; gap:12px; align-items:center; margin-top: 22px; flex-wrap:wrap}
+
+    .trust-row{
+      margin-top: 22px;
+      display:flex; flex-wrap:wrap; gap:10px;
+      color: #29406c;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(11,61,145,.14);
+      font-weight:700;
+      font-size:12px;
+    }
+    .pill svg{opacity:.92}
+
+    .hero-card{
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(246,250,255,.92));
+      border: 1px solid rgba(11,61,145,.14);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(420px 220px at 20% 20%, rgba(26,188,156,.20), transparent 60%),
+                  radial-gradient(520px 240px at 80% 30%, rgba(11,61,145,.18), transparent 65%);
+      pointer-events:none;
+    }
+    .hero-card-inner{position:relative; padding:18px}
+    .mock-top{display:flex; align-items:center; justify-content:space-between}
+    .lights{display:flex; gap:8px}
+    .light{width:10px; height:10px; border-radius:999px; background: rgba(11,61,145,.22)}
+    .mock-title{font-size:12px; color: var(--muted); font-weight:700}
+
+    .mock-grid{margin-top:14px; display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+    .panel{
+      border-radius: 16px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(11,61,145,.12);
+      box-shadow: 0 12px 22px rgba(11,61,145,.08);
+      padding: 14px;
+      min-height: 118px;
+    }
+    .panel h3{margin:0; font-size:13px; font-weight:800; color:#1B2B4B}
+    .panel p{margin:6px 0 0; font-size:12px; color: var(--muted)}
+    .sparkline{margin-top:10px; height:40px; border-radius:12px; background: linear-gradient(90deg, rgba(11,61,145,.10), rgba(26,188,156,.12)); position:relative; overflow:hidden}
+    .sparkline::after{content:""; position:absolute; inset:0; background: repeating-linear-gradient(90deg, rgba(255,255,255,.0), rgba(255,255,255,.0) 10px, rgba(255,255,255,.35) 10px, rgba(255,255,255,.35) 11px)}
+
+    .panel-wide{grid-column: 1 / -1; min-height: 108px}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(26,188,156,.28);
+      background: rgba(26,188,156,.10);
+      font-size:12px;
+      font-weight:800;
+      color:#0b3a31;
+    }
+    .rows{margin-top:10px; display:grid; gap:8px}
+    .row{height:12px; border-radius:999px; background: rgba(11,61,145,.10)}
+    .row:nth-child(2){width:82%}
+    .row:nth-child(3){width:66%}
+
+    /* Sections */
+    .section{padding:72px 0}
+    .section-title{
+      font-size: 30px;
+      letter-spacing: -0.02em;
+      margin:0;
+      color: var(--navy);
+    }
+    .section-sub{margin:10px 0 0; color: var(--muted); max-width: 72ch}
+
+    .grid-3{display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-top: 22px}
+    .grid-2{display:grid; grid-template-columns: repeat(2, 1fr); gap:16px; margin-top: 22px}
+
+    .card{
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.88);
+      border: 1px solid rgba(11,61,145,.14);
+      box-shadow: var(--shadow-soft);
+      padding: 18px;
+    }
+    .card h3{margin: 10px 0 0; font-size:16px; color:#1B2B4B; letter-spacing:-0.01em}
+    .card p{margin:8px 0 0; color:var(--muted); font-size:14px}
+
+    .icon{
+      width:42px; height:42px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(11,61,145,.12), rgba(26,188,156,.14));
+      border: 1px solid rgba(11,61,145,.14);
+    }
+    .icon svg{width:22px; height:22px}
+
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(11,61,145,.18), transparent);
+    }
+
+    /* Testimonials */
+    .quote{font-size:14px; color:#2a3e69; margin: 0}
+    .person{display:flex; align-items:center; gap:12px; margin-top: 14px}
+    .avatar{width:38px; height:38px; border-radius: 14px; background: linear-gradient(135deg, rgba(11,61,145,.22), rgba(26,188,156,.22)); border:1px solid rgba(11,61,145,.14)}
+    .who{font-weight:800; font-size:13px; color:#1B2B4B}
+    .role{font-size:12px; color: var(--muted)}
+
+    /* CTA band */
+    .cta-band{
+      border-radius: 26px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(11,61,145,.92), rgba(26,188,156,.88));
+      color: #fff;
+      box-shadow: 0 24px 70px rgba(11,61,145,.20);
+      border: 1px solid rgba(255,255,255,.22);
+      display:flex; align-items:center; justify-content:space-between; gap:18px;
+      margin-top: 26px;
+    }
+    .cta-band h3{margin:0; font-size:18px; letter-spacing:-0.01em}
+    .cta-band p{margin:6px 0 0; opacity:.92; font-size:14px}
+    .cta-band .btn{background:#fff; color:#0f2a55; border-color: transparent}
+    .cta-band .btn:hover{box-shadow: 0 14px 30px rgba(0,0,0,.18)}
+
+    /* Footer */
+    footer{padding:44px 0 30px; border-top:1px solid var(--line); background: rgba(255,255,255,.75)}
+    .footer-grid{display:grid; grid-template-columns: 1.3fr .7fr .7fr; gap:16px}
+    .small{font-size:12px; color: var(--muted)}
+    .footer-links a{display:block; padding:8px 0; color:#233457; font-size:13px}
+    .social{display:flex; gap:10px; margin-top: 10px}
+    .social a{width:38px; height:38px; border-radius: 14px; display:grid; place-items:center; border:1px solid rgba(11,61,145,.14); background: rgba(255,255,255,.9)}
+    .social svg{width:18px; height:18px; color:#1B2B4B}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero-grid{grid-template-columns: 1fr; gap:20px}
+      .grid-3{grid-template-columns: 1fr 1fr}
+      .footer-grid{grid-template-columns: 1fr 1fr}
+      .menu{display:none}
+      .mobile-toggle{display:inline-flex}
+    }
+    @media (max-width: 640px){
+      .grid-3,.grid-2{grid-template-columns: 1fr}
+      .cta-band{flex-direction:column; align-items:flex-start}
+      .actions{display:none}
+      .brand{min-width:auto}
+      .hero{padding:44px 0 8px}
+      .section{padding:56px 0}
+    }
+
+    /* Mobile menu */
+    .mobile-menu{
+      display:none;
+      padding: 12px 0 18px;
+    }
+    .mobile-menu.open{display:block}
+    .mobile-panel{
+      border-radius: 18px;
+      border: 1px solid rgba(11,61,145,.14);
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--shadow-soft);
+      padding: 12px;
+      display:grid;
+      gap:6px;
+    }
+    .mobile-panel a{padding:12px 12px; border-radius: 14px; font-weight:700; color:#233457; font-size:14px}
+    .mobile-panel a:hover{background: rgba(11,61,145,.06)}
+    .mobile-actions{display:grid; gap:10px; margin-top: 8px}
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Lumina CRM",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description": "CRM omnicanal con automatización e inteligencia (IA/ML) para mejorar eficiencia y conectividad en equipos comerciales.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "PEN",
+      "category": "trial"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip" href="#contenido">Saltar al contenido</a>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="#" aria-label="Lumina CRM">
+          <img class="brand-mark" src="logo_LUMINA.png" alt="Logo Lumina CRM" />
+          <div>
+            <div class="brand-name">Lumina <span style="color:var(--teal); font-weight:900">CRM</span></div>
+            <div class="brand-sub">Elegancia corporativa · IA/ML · Automatización</div>
+          </div>
+        </a>
+
+        <nav class="menu" aria-label="Navegación principal">
+          <a href="#funcionalidades">Funcionalidades</a>
+          <a href="#beneficios">Beneficios</a>
+          <a href="#testimonios">Testimonios</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+
+        <div class="actions">
+          <a class="btn btn-secondary" href="#funcionalidades">Ver funcionalidades</a>
+          <a class="btn btn-primary" href="#contacto">Solicita demo</a>
+        </div>
+
+        <button class="btn btn-secondary mobile-toggle" type="button" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">
+          <span style="display:inline-flex; align-items:center; gap:10px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h16" stroke="#1B2B4B" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Menú
+          </span>
+        </button>
+      </div>
+
+      <div id="mobileMenu" class="mobile-menu" role="region" aria-label="Menú móvil">
+        <div class="mobile-panel">
+          <a href="#funcionalidades">Funcionalidades</a>
+          <a href="#beneficios">Beneficios</a>
+          <a href="#testimonios">Testimonios</a>
+          <a href="#contacto">Contacto</a>
+          <div class="mobile-actions">
+            <a class="btn btn-secondary" href="#funcionalidades">Ver funcionalidades</a>
+            <a class="btn btn-primary" href="#contacto">Solicita demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <div class="kicker">
+              <span class="dot" aria-hidden="true"></span>
+              Lumina CRM para PYMES · Perú y LATAM
+            </div>
+
+            <h1>Lumina CRM: claridad y control en la gestión de tus clientes</h1>
+            <p class="lead">
+              Un CRM moderno y corporativo que centraliza tu pipeline, automatiza procesos y aplica IA/ML para priorizar oportunidades.
+              Diseñado para crecer con elegancia: eficiencia, conectividad y decisiones basadas en datos.
+            </p>
+
+            <div class="cta-row">
+              <a class="btn btn-primary" href="#contacto">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M5 12h14M13 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Solicita demo
+              </a>
+              <a class="btn btn-teal" href="#funcionalidades">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="#06251f" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Ver funcionalidades
+              </a>
+              <a class="btn btn-secondary" href="#testimonios">Ver casos</a>
+            </div>
+
+            <div class="trust-row" aria-label="Pilares">
+              <span class="pill">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3l7 4v6c0 5-3.5 8-7 8s-7-3-7-8V7l7-4z" stroke="#0B3D91" stroke-width="2"/>
+                </svg>
+                Confianza corporativa
+              </span>
+              <span class="pill">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 17l4-4 3 3 5-6" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 19h16" stroke="#0B3D91" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Impacto medible
+              </span>
+              <span class="pill">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke="#0B3D91" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Innovación práctica
+              </span>
+            </div>
+          </div>
+
+          <div class="hero-card" aria-label="Vista del producto (ilustración)">
+            <div class="hero-card-inner">
+              <div class="mock-top">
+                <div class="lights" aria-hidden="true">
+                  <span class="light"></span><span class="light"></span><span class="light"></span>
+                </div>
+                <div class="mock-title">Panel ejecutivo · Pipeline · IA/ML</div>
+              </div>
+
+              <div class="mock-grid">
+                <div class="panel">
+                  <h3>Scoring (IA/ML)</h3>
+                  <p>Prioriza leads por probabilidad y valor.</p>
+                  <div class="sparkline" aria-hidden="true"></div>
+                </div>
+                <div class="panel">
+                  <h3>Omnicanal</h3>
+                  <p>Conectividad para seguir cada conversación.</p>
+                  <div class="sparkline" aria-hidden="true"></div>
+                </div>
+                <div class="panel panel-wide">
+                  <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+                    <h3 style="margin:0">Automatización</h3>
+                    <span class="badge">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7z" stroke="#0b3a31" stroke-width="2" stroke-linejoin="round"/>
+                      </svg>
+                      Workflows
+                    </span>
+                  </div>
+                  <div class="rows" aria-hidden="true">
+                    <div class="row"></div>
+                    <div class="row"></div>
+                    <div class="row"></div>
+                  </div>
+                </div>
+              </div>
+
+              <p style="margin:14px 0 0; color:var(--muted); font-size:12px">
+                Ilustración minimalista. Reemplaza por screenshots reales cuando estén disponibles.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container"><div class="divider"></div></div>
+
+    <!-- Funcionalidades -->
+    <section class="section" id="funcionalidades">
+      <div class="container">
+        <h2 class="section-title">Funcionalidades diseñadas para eficiencia y escalabilidad</h2>
+        <p class="section-sub">
+          Todo lo esencial para operar con disciplina comercial y un estándar corporativo: automatización, conectividad y analítica avanzada.
+        </p>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 2v4M12 18v4M4 12H2m20 0h-2" stroke="#0B3D91" stroke-width="2" stroke-linecap="round"/>
+                <path d="M7.5 7.5l-2-2m13 13l-2-2M7.5 16.5l-2 2m13-13l-2 2" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 8a4 4 0 100 8 4 4 0 000-8z" stroke="#0B3D91" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3>IA y Machine Learning</h3>
+            <p>Scoring predictivo para priorizar oportunidades, detectar señales de cierre y optimizar el esfuerzo del equipo.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M7 7h10v10H7V7z" stroke="#0B3D91" stroke-width="2"/>
+                <path d="M7 12h10" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 7v10" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Automatización de procesos</h3>
+            <p>Workflows para tareas, recordatorios y seguimiento. Reduce reprocesos y estandariza la operación comercial.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M7 12a5 5 0 019.6-2" stroke="#0B3D91" stroke-width="2" stroke-linecap="round"/>
+                <path d="M17 12a5 5 0 01-9.6 2" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round"/>
+                <path d="M14 10h5V5" stroke="#0B3D91" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 14H5v5" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Conectividad omnicanal</h3>
+            <p>Integra canales clave (WhatsApp/Email/Calendario) para que cada cliente tenga trazabilidad y contexto.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4 19V5" stroke="#0B3D91" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 19h16" stroke="#0B3D91" stroke-width="2" stroke-linecap="round"/>
+                <path d="M7 15l3-3 3 2 5-6" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Analítica ejecutiva</h3>
+            <p>Dashboards de embudo, productividad y tiempos para decisiones rápidas, con una estética limpia y corporativa.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 3l8 4v5c0 6-4 9-8 9s-8-3-8-9V7l8-4z" stroke="#0B3D91" stroke-width="2"/>
+                <path d="M9 12l2 2 4-5" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Gobierno y control</h3>
+            <p>Procesos estandarizados, roles y trazabilidad para equipos comerciales que necesitan orden y cumplimiento.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 6v6l4 2" stroke="#0B3D91" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 12a9 9 0 11-9-9" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Tiempo-a-valor</h3>
+            <p>Implementación rápida y progresiva: empieza con lo esencial y escala sin fricción conforme madura el proceso.</p>
+          </article>
+        </div>
+
+        <div class="cta-band">
+          <div>
+            <h3>¿Quieres ver Lumina CRM en acción?</h3>
+            <p>Agendemos una demo enfocada en tu proceso: pipeline, automatizaciones y analítica.</p>
+          </div>
+          <a class="btn" href="#contacto">Solicita demo</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="container"><div class="divider"></div></div>
+
+    <!-- Beneficios -->
+    <section class="section" id="beneficios">
+      <div class="container">
+        <h2 class="section-title">Beneficios: eficiencia, conectividad y resultados</h2>
+        <p class="section-sub">
+          Lumina CRM está pensado para equipos que buscan profesionalizar su operación, elevar la calidad del seguimiento y ganar previsibilidad.
+        </p>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M8 12h8" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 8v8" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 6h16v12H4V6z" stroke="#0B3D91" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3>Más productividad con procesos</h3>
+            <p>Reduce tareas manuales con automatización y plantillas: tu equipo se enfoca en conversaciones y cierres.</p>
+          </div>
+          <div class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M6 13a6 6 0 1111.3 2.8" stroke="#0B3D91" stroke-width="2" stroke-linecap="round"/>
+                <path d="M8 17h6" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round"/>
+                <path d="M10 20h2" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Decisiones con claridad</h3>
+            <p>IA/ML y analítica ejecutiva para priorizar: menos intuición, más control del pipeline.</p>
+          </div>
+          <div class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 21s7-4.4 7-10V6l-7-3-7 3v5c0 5.6 7 10 7 10z" stroke="#0B3D91" stroke-width="2"/>
+                <path d="M9 12l2 2 4-5" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Profesionalismo y consistencia</h3>
+            <p>Un estándar operativo replicable: seguimiento disciplinado, información confiable y comunicación ordenada.</p>
+          </div>
+          <div class="card">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 4v16" stroke="#0B3D91" stroke-width="2" stroke-linecap="round"/>
+                <path d="M8 8l4-4 4 4" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 16l4 4 4-4" stroke="#1ABC9C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Escala sin fricción</h3>
+            <p>Crece por equipos, canales o sedes manteniendo control y visibilidad, con una experiencia uniforme.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container"><div class="divider"></div></div>
+
+    <!-- Testimonios -->
+    <section class="section" id="testimonios">
+      <div class="container">
+        <h2 class="section-title">Testimonios</h2>
+        <p class="section-sub">Aún no publicamos testimonios. Si eres cliente y quieres compartir tu experiencia, escríbenos.</p>
+
+        <div class="grid-3">
+          <article class="card" style="grid-column: 1 / -1;">
+            <p class="quote">“Estamos preparando casos reales y testimonios verificables. Por ahora, podemos mostrar una demo enfocada en tu proceso y objetivos.”</p>
+            <div class="cta-row" style="margin-top:14px">
+              <a class="btn btn-primary" href="#contacto">Solicitar demo</a>
+              <a class="btn btn-secondary" href="mailto:luminacrm@gmail.com">Escribir por email</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="container"><div class="divider"></div></div>
+
+    <!-- Contacto / CTA final -->
+    <section class="section" id="contacto">
+      <div class="container">
+        <h2 class="section-title">Solicita una demo</h2>
+        <p class="section-sub">Déjanos tus datos y te contactamos con una demostración enfocada en tu proceso comercial.</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Contacto corporativo</h3>
+            <p>
+              Correo: <strong><a href="mailto:luminacrm@gmail.com">luminacrm@gmail.com</a></strong><br/>
+              Teléfono / WhatsApp: <strong><a href="tel:+51935891867">+51 935 891 867</a></strong><br/>
+              Horario: Lun–Vie · 9:00–18:00
+            </p>
+            <div class="cta-row" style="margin-top:14px">
+              <a class="btn btn-primary" href="https://wa.me/51935891867?text=Hola%20Lumina%20CRM%2C%20quisiera%20una%20demo." target="_blank" rel="noopener">Enviar WhatsApp</a>
+              <a class="btn btn-secondary" href="#funcionalidades">Ver funcionalidades</a>
+            </div>
+            <p class="small" style="margin-top:12px">Tiempo de respuesta estimado: dentro del horario de atención.</p>
+          </div>
+
+          <form class="card" id="leadForm" novalidate>
+            <h3>Formulario</h3>
+            <p class="small">Envío directo al backend (PHP). Te responderemos dentro del horario de atención.</p>
+            <div style="display:grid; gap:12px; margin-top:12px">
+              <label style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden" aria-hidden="true">
+                <span class="small">Website</span>
+                <input name="website" tabindex="-1" autocomplete="off" />
+              </label>
+              <label>
+                <span class="small">Nombre</span>
+                <input required name="name" style="width:100%; margin-top:6px; padding:12px 12px; border-radius:14px; border:1px solid rgba(11,61,145,.18); background:#fff" placeholder="Tu nombre" />
+              </label>
+              <label>
+                <span class="small">Email</span>
+                <input required type="email" name="email" style="width:100%; margin-top:6px; padding:12px 12px; border-radius:14px; border:1px solid rgba(11,61,145,.18); background:#fff" placeholder="tu@empresa.com" />
+              </label>
+              <label>
+                <span class="small">Empresa</span>
+                <input name="company" style="width:100%; margin-top:6px; padding:12px 12px; border-radius:14px; border:1px solid rgba(11,61,145,.18); background:#fff" placeholder="Nombre de empresa" />
+              </label>
+              <label>
+                <span class="small">Mensaje</span>
+                <textarea name="message" rows="4" style="width:100%; margin-top:6px; padding:12px 12px; border-radius:14px; border:1px solid rgba(11,61,145,.18); background:#fff" placeholder="Cuéntanos qué quieres automatizar o mejorar"></textarea>
+              </label>
+              <button class="btn btn-teal" type="submit" style="justify-content:center" id="leadSubmit">
+                Enviar solicitud
+              </button>
+              <div class="small" id="leadStatus" role="status" aria-live="polite"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand" style="gap:10px">
+            <img class="brand-mark" src="logo_LUMINA.png" alt="Logo Lumina CRM" />
+            <div>
+              <div class="brand-name">Lumina <span style="color:var(--teal); font-weight:900">CRM</span></div>
+              <div class="brand-sub">Claridad · Control · Innovación</div>
+            </div>
+          </div>
+          <p class="small" style="margin-top:12px">CRM corporativo con automatización e IA/ML para equipos comerciales que quieren escalar con confianza.</p>
+          <div class="social" aria-label="Redes sociales">
+            <a href="#" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 9v12M6 6.5v.5M10 21v-7.2c0-2.1 1.2-3.3 3-3.3 1.7 0 3 1.2 3 3.3V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </a>
+            <a href="#" aria-label="X (Twitter)">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 4l16 16M20 4L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </a>
+            <a href="#" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M10 9l6 3-6 3V9z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M21 12c0 6-1 7-9 7s-9-1-9-7 1-7 9-7 9 1 9 7z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <div class="brand-name" style="font-size:14px">Producto</div>
+          <a href="#funcionalidades">Funcionalidades</a>
+          <a href="#beneficios">Beneficios</a>
+          <a href="#testimonios">Testimonios</a>
+        </div>
+
+        <div class="footer-links">
+          <div class="brand-name" style="font-size:14px">Contacto</div>
+          <a href="#contacto">Solicitar demo</a>
+          <a href="mailto:luminacrm@gmail.com">luminacrm@gmail.com</a>
+          <a href="tel:+51935891867">+51 935 891 867</a>
+        </div>
+      </div>
+
+      <div class="small" style="margin-top:18px">
+        © <span id="year"></span> Lumina CRM. Todos los derechos reservados.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const yearEl = document.getElementById('year');
+    yearEl.textContent = new Date().getFullYear();
+
+    const btn = document.getElementById('menuBtn');
+    const menu = document.getElementById('mobileMenu');
+    if (btn && menu) {
+      btn.addEventListener('click', () => {
+        const open = menu.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      menu.querySelectorAll('a').forEach((a) => {
+        a.addEventListener('click', () => {
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+
+    const leadForm = document.getElementById('leadForm');
+    const leadStatus = document.getElementById('leadStatus');
+    const leadSubmit = document.getElementById('leadSubmit');
+
+    function getApiEndpoint() {
+      // Relative path works when served at http://localhost/Landing/
+      // Fallback helps when opening the file directly (file://)
+      if (window.location.protocol === 'file:') return 'http://localhost/Landing/api/contact.php';
+      return 'api/contact.php';
+    }
+
+    function setStatus(text, ok) {
+      if (!leadStatus) return;
+      leadStatus.textContent = text;
+      leadStatus.style.color = ok ? 'var(--teal)' : 'var(--muted)';
+    }
+
+    if (leadForm) {
+      leadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        setStatus('Enviando…', true);
+        if (leadSubmit) leadSubmit.disabled = true;
+
+        try {
+          const formData = new FormData(leadForm);
+          const payload = Object.fromEntries(formData.entries());
+
+          const res = await fetch(getApiEndpoint(), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data.ok) {
+            const msg = (data && data.error) ? data.error : 'No se pudo enviar. Intenta nuevamente.';
+            setStatus(msg, false);
+            return;
+          }
+
+          setStatus('Listo. Recibimos tu solicitud y te contactaremos pronto.', true);
+          leadForm.reset();
+        } catch (err) {
+          setStatus('Error de conexión. Abre el landing desde http://localhost/Landing/.', false);
+        } finally {
+          if (leadSubmit) leadSubmit.disabled = false;
+        }
+      });
+    }
+  </script>
+</body>
+</html>
