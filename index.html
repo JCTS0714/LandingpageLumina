@@ -193,6 +193,7 @@
       pointer-events:none;
     }
     .hero-card-inner{position:relative; padding:18px}
+    .hero-illustration{width:100%; height:auto; display:block; border-radius:12px; object-fit:contain; max-height:420px}
     .mock-top{display:flex; align-items:center; justify-content:space-between}
     .lights{display:flex; gap:8px}
     .light{width:10px; height:10px; border-radius:999px; background: rgba(11,61,145,.22)}
@@ -462,45 +463,7 @@
 
           <div class="hero-card" aria-label="Vista del producto (ilustración)">
             <div class="hero-card-inner">
-              <div class="mock-top">
-                <div class="lights" aria-hidden="true">
-                  <span class="light"></span><span class="light"></span><span class="light"></span>
-                </div>
-                <div class="mock-title">Panel ejecutivo · Pipeline · IA/ML</div>
-              </div>
-
-              <div class="mock-grid">
-                <div class="panel">
-                  <h3>Scoring (IA/ML)</h3>
-                  <p>Prioriza leads por probabilidad y valor.</p>
-                  <div class="sparkline" aria-hidden="true"></div>
-                </div>
-                <div class="panel">
-                  <h3>Omnicanal</h3>
-                  <p>Conectividad para seguir cada conversación.</p>
-                  <div class="sparkline" aria-hidden="true"></div>
-                </div>
-                <div class="panel panel-wide">
-                  <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
-                    <h3 style="margin:0">Automatización</h3>
-                    <span class="badge">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7z" stroke="#0b3a31" stroke-width="2" stroke-linejoin="round"/>
-                      </svg>
-                      Workflows
-                    </span>
-                  </div>
-                  <div class="rows" aria-hidden="true">
-                    <div class="row"></div>
-                    <div class="row"></div>
-                    <div class="row"></div>
-                  </div>
-                </div>
-              </div>
-
-              <p style="margin:14px 0 0; color:var(--muted); font-size:12px">
-                Ilustración minimalista. Reemplaza por screenshots reales cuando estén disponibles.
-              </p>
+                <img src="assets/og-image.svg" alt="Vista del producto" class="hero-illustration" />
             </div>
           </div>
         </div>
